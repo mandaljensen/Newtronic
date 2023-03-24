@@ -2,7 +2,7 @@
 
 report 50000 "Sales Invoice (Newtronic)"
 {
-    RDLCLayout = './layouts/50000.Report.SalesInvoice.rdlc';
+    RDLCLayout = './src/layouts/50000.Report.SalesInvoice.rdlc';
     CaptionML = DAN = 'Salgsfaktura', ENU = 'Sales Invoice';
     DefaultLayout = RDLC;
     EnableHyperlinks = true;
@@ -869,7 +869,7 @@ report 50000 "Sales Invoice (Newtronic)"
                 column(TotalAmountExclInclVAT; Format(TotalAmountExclInclVATValue, 0, AutoFormat.ResolveAutoFormat("Auto Format"::AmountFormat, Header."Currency Code")))
                 {
                 }
-                column(TotalAmountExclInclVATText; TotalAmountExclInclVATTextValue)
+                column(TotalAmountExclInclVATText; TotalInclVATTxtToShow)
                 {
                 }
 
@@ -882,6 +882,11 @@ report 50000 "Sales Invoice (Newtronic)"
                         TotalAmountExclInclVATTextValue := TotalInclVATText;
                         TotalAmountExclInclVATValue := TotalAmountInclVAT;
                     end;
+
+                    if (Header."Gen. Bus. Posting Group" = 'DK') or (Header."Gen. Bus. Posting Group" = 'INDENLANDS') then
+                        TotalInclVATTxtToShow := StrSubstNo(TotalInclVATTxt, Header."Currency Code")
+                    else
+                        TotalInclVATTxtToShow := StrSubstNo(TotalInclVATTxtForeign, Header."Currency Code");
                 end;
             }
 
@@ -1170,6 +1175,9 @@ report 50000 "Sales Invoice (Newtronic)"
         IBANLbl: TextConst DAN = 'IBAN', ENU = 'IBAN';
         SWIFTLbl: TextConst DAN = 'SWIFT', ENU = 'SWIFT';
         QtyLbl: TextConst DAN = 'Antal', ENU = 'Qty.';
+        TotalInclVATTxtForeign: TextConst ENU = 'Total %1', DAN = 'I alt %1';
+        TotalInclVATTxt: TextConst ENU = 'Total %1 incl. VAT', DAN = 'I alt %1 inkl. moms';
+        TotalInclVATTxtToShow: Text[50];
 
     local procedure InitLogInteraction()
     begin

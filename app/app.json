@@ -10,11 +10,11 @@
   "help": "",
   "url": "https://www.mandal-jensen.dk",
   "logo": "",
-  "capabilities": [],
   "dependencies": [],
   "screenshots": [],
   "platform": "19.0.0.0",
   "application": "19.0.0.0",
+  "features": [],
   "idRanges": [{
     "from": 50000,
     "to": 50010
@@ -24,6 +24,6 @@
     "to": 60010
   }],
   "runtime": "8.1",
-  "target": "Extension",
-  "showMyCode": true
+  "target": "Cloud",
+  "resourceExposurePolicy": {"allowDebugging": true,"allowDownloadingSource": true,"includeSourceInSymbolFile": true}
 }

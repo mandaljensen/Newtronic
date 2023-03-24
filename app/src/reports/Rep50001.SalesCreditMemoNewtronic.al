@@ -1,21 +1,21 @@
-// Version List=LC00.12;
+// Version List=LC00.03;
 
-report 50004 "Purchase Order (Newtronic)"
+report 50001 "Sales Credit Memo (Newtronic)"
 {
-    RDLCLayout = './REP/50004.Report.PurchOrder.rdlc';
-    CaptionML = DAN = 'Købsordre', ENU = 'Purchase Order';
+    RDLCLayout = './src/layouts/50001.Report.SalesCrMemo.rdlc';
+    CaptionML = DAN = 'Salgskreditnota', ENU = 'Sales Credit Memo';
     DefaultLayout = RDLC;
     EnableHyperlinks = true;
     PreviewMode = PrintLayout;
 
     dataset
     {
-        dataitem(Header; "Purchase Header")
+        dataitem(Header; "Sales Cr.Memo Header")
         {
-            DataItemTableView = SORTING("Document Type", "No.") WHERE("Document Type" = CONST(Order));
+            DataItemTableView = SORTING("No.");
             RequestFilterFields = "No.", "Sell-to Customer No.", "No. Printed";
-            RequestFilterHeadingML = DAN = 'Købsordre',
-                                     ENU = 'Purchase Order';
+            RequestFilterHeadingML = DAN = 'Bogført salgskreditnota',
+                                     ENU = 'Posted Sales Credit Memo';
             column(CompanyAddress1; CompanyAddr[1])
             {
             }
@@ -52,7 +52,7 @@ report 50004 "Purchase Order (Newtronic)"
             column(CompanyPhoneNo; CompanyInfo."Phone No.")
             {
             }
-            column(CompanyPhoneNo_Lbl; CompanyInfoPhoneNoLbl)
+            column(CompanyPhoneNo_Lbl; PhoneNoLbl)
             {
             }
             column(CompanyFaxNo; CompanyInfo."Fax No.")
@@ -85,13 +85,13 @@ report 50004 "Purchase Order (Newtronic)"
             column(CompanyIBAN; CompanyInfo.IBAN)
             {
             }
-            column(CompanyIBAN_Lbl; CompanyInfo.FieldCaption(IBAN))
+            column(CompanyIBAN_Lbl; IBANLbl)
             {
             }
             column(CompanySWIFT; CompanyInfo."SWIFT Code")
             {
             }
-            column(CompanySWIFT_Lbl; CompanyInfo.FieldCaption("SWIFT Code"))
+            column(CompanySWIFT_Lbl; SWIFTLbl)
             {
             }
             column(CompanyLogoPosition; CompanyLogoPosition)
@@ -121,31 +121,34 @@ report 50004 "Purchase Order (Newtronic)"
             column(CompanyCustomGiro_Lbl; CompanyInfo.GetCustomGiroLbl)
             {
             }
+            column(CompanyLegalStatement; GetLegalStatement)
+            {
+            }
             column(DisplayAdditionalFeeNote; DisplayAdditionalFeeNote)
             {
             }
-            column(BuyFromAddr1; BuyFromAddr[1])
+            column(CustomerAddress1; CustAddr[1])
             {
             }
-            column(BuyFromAddr2; BuyFromAddr[2])
+            column(CustomerAddress2; CustAddr[2])
             {
             }
-            column(BuyFromAddr3; BuyFromAddr[3])
+            column(CustomerAddress3; CustAddr[3])
             {
             }
-            column(BuyFromAddr4; BuyFromAddr[4])
+            column(CustomerAddress4; CustAddr[4])
             {
             }
-            column(BuyFromAddr5; BuyFromAddr[5])
+            column(CustomerAddress5; CustAddr[5])
             {
             }
-            column(BuyFromAddr6; BuyFromAddr[6])
+            column(CustomerAddress6; CustAddr[6])
             {
             }
-            column(BuyFromAddr7; BuyFromAddr[7])
+            column(CustomerAddress7; CustAddr[7])
             {
             }
-            column(BuyFromAddr8; BuyFromAddr[8])
+            column(CustomerAddress8; CustAddr[8])
             {
             }
             column(CustomerPostalBarCode; FormatAddr.PostalBarCode(1))
@@ -161,6 +164,12 @@ report 50004 "Purchase Order (Newtronic)"
             {
             }
             column(ShipmentMethodDescription_Lbl; ShptMethodDescLbl)
+            {
+            }
+            column(ShipmentDate; Format("Shipment Date", 0, 4))
+            {
+            }
+            column(ShipmentDate_Lbl; FieldCaption("Shipment Date"))
             {
             }
             column(Shipment_Lbl; ShipmentLbl)
@@ -196,10 +205,58 @@ report 50004 "Purchase Order (Newtronic)"
             column(ShipToAddress8; ShipToAddr[8])
             {
             }
+            column(SellToContactPhoneNoLbl; SellToContactPhoneNoLbl)
+            {
+            }
+            column(SellToContactMobilePhoneNoLbl; SellToContactMobilePhoneNoLbl)
+            {
+            }
+            column(SellToContactEmailLbl; SellToContactEmailLbl)
+            {
+            }
+            column(BillToContactPhoneNoLbl; BillToContactPhoneNoLbl)
+            {
+            }
+            column(BillToContactMobilePhoneNoLbl; BillToContactMobilePhoneNoLbl)
+            {
+            }
+            column(BillToContactEmailLbl; BillToContactEmailLbl)
+            {
+            }
+            column(SellToContactPhoneNo; SellToContact."Phone No.")
+            {
+            }
+            column(SellToContactMobilePhoneNo; SellToContact."Mobile Phone No.")
+            {
+            }
+            column(SellToContactEmail; SellToContact."E-Mail")
+            {
+            }
+            column(BillToContactPhoneNo; BillToContact."Phone No.")
+            {
+            }
+            column(BillToContactMobilePhoneNo; BillToContact."Mobile Phone No.")
+            {
+            }
+            column(BillToContactEmail; BillToContact."E-Mail")
+            {
+            }
             column(PaymentTermsDescription; PaymentTerms.Description)
             {
             }
             column(PaymentTermsDescription_Lbl; PaymentTermsDescLbl)
+            {
+            }
+            column(PaymentMethodDescription; PaymentMethod.Description)
+            {
+            }
+            column(PaymentMethodDescription_Lbl; PaymentMethodDescLbl)
+            {
+            }
+            column(BilltoCustumerNo; "Bill-to Customer No.")
+            {
+            }
+            column(BilltoCustomerNo_Lbl; FieldCaption("Bill-to Customer No."))
             {
             }
             column(DocumentDate; Format("Document Date", 0, 4))
@@ -220,10 +277,10 @@ report 50004 "Purchase Order (Newtronic)"
             column(DocumentNo_Lbl; InvNoLbl)
             {
             }
-            column(QuoteNo; "Quote No.")
+            column(AppliesToDocument; AppliesToText)
             {
             }
-            column(QuoteNo_Lbl; FieldCaption("Quote No."))
+            column(AppliesToDocument_Lbl; AppliesToTextLbl)
             {
             }
             column(PricesIncludingVAT; "Prices Including VAT")
@@ -238,16 +295,46 @@ report 50004 "Purchase Order (Newtronic)"
             column(SalesPerson_Lbl; SalespersonLbl)
             {
             }
-            column(SalesPersonBlank_Lbl; PurchaserText)
+            column(SalesPersonBlank_Lbl; SalesPersonText)
             {
             }
-            column(SalesPersonName; SalesPurchPerson.Name)
+            column(SalesPersonName; SalespersonPurchaser.Name)
             {
             }
             column(SelltoCustomerNo; "Sell-to Customer No.")
             {
             }
             column(SelltoCustomerNo_Lbl; FieldCaption("Sell-to Customer No."))
+            {
+            }
+            column(VATRegistrationNo; GetCustomerVATRegistrationNumber)
+            {
+            }
+            column(VATRegistrationNo_Lbl; GetCustomerVATRegistrationNumberLbl)
+            {
+            }
+            column(GlobalLocationNumber; GetCustomerGlobalLocationNumber)
+            {
+            }
+            column(GlobalLocationNumber_Lbl; GetCustomerGlobalLocationNumberLbl)
+            {
+            }
+            column(SellToPhoneNo; "Sell-to Phone No.")
+            {
+            }
+            column(From_Lbl; FromLbl)
+            {
+            }
+            column(BilledTo_Lbl; BilledToLbl)
+            {
+            }
+            column(ChecksPayable_Lbl; ChecksPayableText)
+            {
+            }
+            column(LegalEntityType; Cust.GetLegalEntityType)
+            {
+            }
+            column(LegalEntityType_Lbl; Cust.GetLegalEntityTypeLbl)
             {
             }
             column(Copy_Lbl; CopyLbl)
@@ -328,16 +415,41 @@ report 50004 "Purchase Order (Newtronic)"
             column(VATPercentage_Lbl; VATPercentageLbl)
             {
             }
+            column(VATClause_Lbl; VATClause.TableCaption)
+            {
+            }
+            column(PackageTrackingNo; "Package Tracking No.")
+            {
+            }
+            column(PackageTrackingNo_Lbl; FieldCaption("Package Tracking No."))
+            {
+            }
+            column(ShippingAgentCode; "Shipping Agent Code")
+            {
+            }
+            column(ShippingAgentCode_Lbl; FieldCaption("Shipping Agent Code"))
+            {
+            }
+            column(PaymentInstructions_Txt; PaymentInstructionsTxt)
+            {
+            }
+            column(ExternalDocumentNo; "External Document No.")
+            {
+            }
+            column(ExternalDocumentNo_Lbl; FieldCaption("External Document No."))
+            {
+            }
             column(VATBaseDiscountPct; "VAT Base Discount %")
             {
+
             }
-            column(SalesOrderNo; SalesOrderNo)
+            column(SellToContact; "Sell-to Contact")
             {
             }
-            column(SalesOrderNoLbl; Line.FieldCaption("Sales Order No."))
+            column(SellToContactLbl; AttentionLbl)
             {
             }
-            dataitem(Line; "Purchase Line")
+            dataitem(Line; "Sales Cr.Memo Line")
             {
                 DataItemLink = "Document No." = FIELD("No.");
                 DataItemLinkReference = Header;
@@ -347,7 +459,7 @@ report 50004 "Purchase Order (Newtronic)"
                 }
                 column(AmountExcludingVAT_Line; Amount)
                 {
-                    AutoFormatExpression = "Currency Code";
+                    AutoFormatExpression = GetCurrencyCode();
                     AutoFormatType = 1;
                 }
                 column(AmountExcludingVAT_Line_Lbl; FieldCaption(Amount))
@@ -355,12 +467,12 @@ report 50004 "Purchase Order (Newtronic)"
                 }
                 column(AmountIncludingVAT_Line; "Amount Including VAT")
                 {
-                    AutoFormatExpression = "Currency Code";
+                    AutoFormatExpression = GetCurrencyCode();
                     AutoFormatType = 1;
                 }
                 column(AmountIncludingVAT_Line_Lbl; FieldCaption("Amount Including VAT"))
                 {
-                    AutoFormatExpression = "Currency Code";
+                    AutoFormatExpression = GetCurrencyCode();
                     AutoFormatType = 1;
                 }
                 column(Description_Line; Description)
@@ -381,7 +493,7 @@ report 50004 "Purchase Order (Newtronic)"
                 }
                 column(LineAmount_Line; FormattedLineAmount)
                 {
-                    AutoFormatExpression = "Currency Code";
+                    AutoFormatExpression = GetCurrencyCode();
                     AutoFormatType = 1;
                 }
                 column(LineAmount_Line_Lbl; AmountCaptionLbl)
@@ -399,6 +511,9 @@ report 50004 "Purchase Order (Newtronic)"
                 column(ItemReferenceNo_Line_Lbl; FieldCaption("Item Reference No."))
                 {
                 }
+                column(ShipmentDate_Line; Format("Shipment Date"))
+                {
+                }
                 column(ShipmentDate_Line_Lbl; PostedShipmentDateLbl)
                 {
                 }
@@ -411,9 +526,9 @@ report 50004 "Purchase Order (Newtronic)"
                 column(Type_Line; Format(Type))
                 {
                 }
-                column(UnitPrice; "Direct Unit Cost")
+                column(UnitPrice; FormattedUnitPrice)
                 {
-                    AutoFormatExpression = "Currency Code";
+                    AutoFormatExpression = GetCurrencyCode();
                     AutoFormatType = 2;
                 }
                 column(UnitPrice_Lbl; UnitPriceCaptionLbl)
@@ -472,12 +587,6 @@ report 50004 "Purchase Order (Newtronic)"
                 column(PricePer_Lbl; PricePerLbl)
                 {
                 }
-                column(ItemAltNo; Item."Vendor Item No.")
-                {
-                }
-                column(ItemAltNo_Lbl; ItemAltNoLbl)
-                {
-                }
                 column(ItemTariffNo; Item."Tariff No.")
                 {
                 }
@@ -496,18 +605,6 @@ report 50004 "Purchase Order (Newtronic)"
                 column(ValueLbl; ValueLbl)
                 {
                 }
-                column(PlannedReceiptDate; Format("Expected Receipt Date"))
-                {
-                }
-                column(ReceiptDateLbl; ReceiptDateLbl)
-                {
-                }
-                column(VendorItemNo; Item.GetVendorItemNo(Header."Pay-to Vendor No."))
-                {
-                }
-                column(VendorItemNoLbl; VendorItemNoLbl)
-                {
-                }
                 trigger OnAfterGetRecord()
                 begin
                     if Type = Type::"G/L Account" then
@@ -518,6 +615,20 @@ report 50004 "Purchase Order (Newtronic)"
                     else
                         LineDiscountPctText := StrSubstNo('%1%', -Round("Line Discount %", 0.1));
 
+                    VATAmountLine.Init();
+                    VATAmountLine."VAT Identifier" := "VAT Identifier";
+                    VATAmountLine."VAT Calculation Type" := "VAT Calculation Type";
+                    VATAmountLine."Tax Group Code" := "Tax Group Code";
+                    VATAmountLine."VAT %" := "VAT %";
+                    VATAmountLine."VAT Base" := Amount;
+                    VATAmountLine."Amount Including VAT" := "Amount Including VAT";
+                    VATAmountLine."Line Amount" := "Line Amount";
+                    if "Allow Invoice Disc." then
+                        VATAmountLine."Inv. Disc. Base Amount" := "Line Amount";
+                    VATAmountLine."Invoice Discount Amount" := "Inv. Discount Amount";
+                    VATAmountLine."VAT Clause Code" := "VAT Clause Code";
+                    VATAmountLine.InsertLine();
+
                     TransHeaderAmount += PrevLineAmount;
                     PrevLineAmount := "Line Amount";
                     TotalSubTotal += "Line Amount";
@@ -527,17 +638,11 @@ report 50004 "Purchase Order (Newtronic)"
                     TotalAmountInclVAT += "Amount Including VAT";
                     TotalPaymentDiscOnVAT += -("Line Amount" - "Inv. Discount Amount" - "Amount Including VAT");
 
+                    FormatDocument.SetSalesCrMemoLine(Line, FormattedQuantity, FormattedUnitPrice, FormattedVATPct, FormattedLineAmount);
+
                     if FirstLineHasBeenOutput then
                         Clear(DummyCompanyInfo.Picture);
                     FirstLineHasBeenOutput := true;
-
-                    FormatDocument.SetPurchaseLine(Line, FormattedQuantity, FormattedUnitPrice, FormattedVATPct, FormattedLineAmount);
-
-                    if Type = Type::Item then begin
-                        if "No." <> Item."No." then
-                            if Item.Get("No.") then;
-                    end else
-                        Clear(Item);
                 end;
 
                 trigger OnPreDataItem()
@@ -599,7 +704,7 @@ report 50004 "Purchase Order (Newtronic)"
                 }
                 column(VATBase_VatAmountLine; "VAT Base")
                 {
-                    AutoFormatExpression = Header."Currency Code";
+                    AutoFormatExpression = Line.GetCurrencyCode();
                     AutoFormatType = 1;
                 }
                 column(VATBase_VatAmountLine_Lbl; FieldCaption("VAT Base"))
@@ -729,7 +834,7 @@ report 50004 "Purchase Order (Newtronic)"
                 column(TotalAmountExclInclVAT; Format(TotalAmountExclInclVATValue, 0, AutoFormat.ResolveAutoFormat("Auto Format"::AmountFormat, Header."Currency Code")))
                 {
                 }
-                column(TotalAmountExclInclVATText; TotalAmountExclInclVATTextValue)
+                column(TotalAmountExclInclVATText; TotalInclVATTxtToShow)
                 {
                 }
 
@@ -742,24 +847,61 @@ report 50004 "Purchase Order (Newtronic)"
                         TotalAmountExclInclVATTextValue := TotalInclVATText;
                         TotalAmountExclInclVATValue := TotalAmountInclVAT;
                     end;
+
+                    if (Header."Gen. Bus. Posting Group" = 'DK') or (Header."Gen. Bus. Posting Group" = 'INDENLANDS') then
+                        TotalInclVATTxtToShow := StrSubstNo(TotalInclVATTxt, Header."Currency Code")
+                    else
+                        TotalInclVATTxtToShow := StrSubstNo(TotalInclVATTxtForeign, Header."Currency Code");
+
                 end;
             }
 
             trigger OnAfterGetRecord()
+            var
+                CurrencyExchangeRate: Record "Currency Exchange Rate";
+                Currency: Record Currency;
+                GeneralLedgerSetup: Record "General Ledger Setup";
             begin
+                if not IsReportInPreviewMode then
+                    CODEUNIT.Run(CODEUNIT::"Sales Cr. Memo-Printed", Header);
+
+                CalcFields("Work Description");
+                ShowWorkDescription := "Work Description".HasValue;
                 CurrReport.Language := Language.GetLanguageIdOrDefault("Language Code");
 
                 FormatAddressFields(Header);
                 FormatDocumentFields(Header);
-                if BuyFromContact.Get("Buy-from Contact No.") then;
-                if PayToContact.Get("Pay-to Contact No.") then;
-                PricesInclVATtxt := Format("Prices Including VAT");
+                if SellToContact.Get("Sell-to Contact No.") then;
+                if BillToContact.Get("Bill-to Contact No.") then;
 
-                if not IsReportInPreviewMode then
-                    if ArchiveDocument then
-                        ArchiveManagement.StorePurchDocument(Header, LogInteraction);
+                if not Cust.Get("Bill-to Customer No.") then
+                    Clear(Cust);
 
-                GetSalesOrderNo;
+                if "Currency Code" <> '' then begin
+                    CurrencyExchangeRate.FindCurrency("Posting Date", "Currency Code", 1);
+                    CalculatedExchRate :=
+                      Round(1 / "Currency Factor" * CurrencyExchangeRate."Exchange Rate Amount", 0.000001);
+                    ExchangeRateText := StrSubstNo(ExchangeRateTxt, CalculatedExchRate, CurrencyExchangeRate."Exchange Rate Amount");
+                    CurrCode := "Currency Code";
+                    if Currency.Get("Currency Code") then
+                        CurrSymbol := Currency.GetCurrencySymbol();
+                end else
+                    if GeneralLedgerSetup.Get() then begin
+                        CurrCode := GeneralLedgerSetup."LCY Code";
+                        CurrSymbol := GeneralLedgerSetup.GetCurrencySymbol();
+                    end;
+
+                TotalSubTotal := 0;
+                TotalInvDiscAmount := 0;
+                TotalAmount := 0;
+                TotalAmountVAT := 0;
+                TotalAmountInclVAT := 0;
+                TotalPaymentDiscOnVAT := 0;
+            end;
+
+            trigger OnPreDataItem()
+            begin
+                FirstLineHasBeenOutput := false;
             end;
         }
     }
@@ -781,18 +923,6 @@ report 50004 "Purchase Order (Newtronic)"
                         CaptionML = DAN = 'Logfør interaktion', ENU = 'Log Interaction';
                         Enabled = LogInteractionEnable;
                         ToolTipML = DAN = 'Angiver at interation med kontakten bliver logført.', ENU = 'Specifies that interactions with the contact are logged.';
-                    }
-                    field(ArchiveDocument; ArchiveDocument)
-                    {
-                        ApplicationArea = Basic, Suite;
-                        Caption = 'Archive Document';
-                        ToolTip = 'Specifies if the document is archived after you print it.';
-
-                        trigger OnValidate()
-                        begin
-                            if not ArchiveDocument then
-                                LogInteraction := false;
-                        end;
                     }
                 }
             }
@@ -823,31 +953,39 @@ report 50004 "Purchase Order (Newtronic)"
         GLSetup.Get();
         CompanyInfo.SetAutoCalcFields(Picture);
         CompanyInfo.Get();
-        PurchSetup.Get();
+        SalesSetup.Get();
+        CompanyInfo.VerifyAndSetPaymentInfo;
     end;
 
     trigger OnPostReport()
     begin
         if LogInteraction and not IsReportInPreviewMode then
-            if Header.FindSet() then
+            if Header.FindSet then
                 repeat
-                    Header.CalcFields("No. of Archived Versions");
-                    SegManagement.LogDocument(13, Header."No.", Header."Doc. No. Occurrence",
-                      Header."No. of Archived Versions", DATABASE::Vendor, Header."Buy-from Vendor No.",
-                      Header."Purchaser Code", '', Header."Posting Description", '');
+                    if Header."Bill-to Contact No." <> '' then
+                        SegManagement.LogDocument(
+                          4, Header."No.", 0, 0, DATABASE::Contact, Header."Bill-to Contact No.", Header."Salesperson Code",
+                          Header."Campaign No.", Header."Posting Description", '')
+                    else
+                        SegManagement.LogDocument(
+                          4, Header."No.", 0, 0, DATABASE::Customer, Header."Bill-to Customer No.", Header."Salesperson Code",
+                          Header."Campaign No.", Header."Posting Description", '');
                 until Header.Next() = 0;
     end;
 
     trigger OnPreReport()
     begin
+        if Header.GetFilters = '' then
+            Error(NoFilterSetErr);
+
         if not CurrReport.UseRequestPage then
             InitLogInteraction;
+
+        CompanyLogoPosition := SalesSetup."Logo Position on Documents";
     end;
 
     var
-        CompanyInfoBankAccNoLbl: Label 'Account No.';
-        CompanyInfoBankNameLbl: Label 'Bank';
-        CompanyInfoGiroNoLbl: Label 'Giro No.';
+
         CopyLbl: Label 'Copy';
         InvDiscBaseAmtLbl: Label 'Invoice Discount Base Amount';
         InvNoLbl: Label 'Invoice No.';
@@ -855,10 +993,8 @@ report 50004 "Purchase Order (Newtronic)"
         LocalCurrencyLbl: Label 'Local Currency';
         PaymentMethodDescLbl: Label 'Payment Method';
         SalesInvLineDiscLbl: Label 'Discount %';
-        SalesInvoiceLbl: Label 'Invoice';
         YourSalesInvoiceLbl: Label 'Your Invoice';
         ShipmentLbl: Label 'Shipment';
-        ShptMethodDescLbl: Label 'Shipment Method';
         TotalLbl: Label 'Total';
         VATAmtSpecificationLbl: Label 'VAT Amount Specification';
         VATAmtLbl: Label 'VAT Amount';
@@ -877,37 +1013,36 @@ report 50004 "Purchase Order (Newtronic)"
         GLSetup: Record "General Ledger Setup";
         ShipmentMethod: Record "Shipment Method";
         PaymentTerms: Record "Payment Terms";
-        PrepmtPaymentTerms: Record "Payment Terms";
-        SalesPurchPerson: Record "Salesperson/Purchaser";
+        PaymentMethod: Record "Payment Method";
+        SalespersonPurchaser: Record "Salesperson/Purchaser";
         CompanyInfo: Record "Company Information";
         DummyCompanyInfo: Record "Company Information";
-        BuyFromContact: Record Contact;
-        PayToContact: Record Contact;
+        SalesSetup: Record "Sales & Receivables Setup";
+        Cust: Record Customer;
         RespCenter: Record "Responsibility Center";
-        PurchSetup: Record "Purchases & Payables Setup";
+        VATClause: Record "VAT Clause";
+        TempLineFeeNoteOnReportHist: Record "Line Fee Note on Report Hist." temporary;
+        SellToContact: Record Contact;
+        BillToContact: Record Contact;
         Language: Codeunit Language;
         FormatAddr: Codeunit "Format Address";
         FormatDocument: Codeunit "Format Document";
-        PurchPost: Codeunit "Purch.-Post";
-        ArchiveManagement: Codeunit ArchiveManagement;
         SegManagement: Codeunit SegManagement;
-        PurchPostPrepmt: Codeunit "Purchase-Post Prepayments";
         AutoFormat: Codeunit "Auto Format";
+        WorkDescriptionInstream: InStream;
         JobNo: Code[20];
         JobTaskNo: Code[20];
+        WorkDescriptionLine: Text;
+        CustAddr: array[8] of Text[100];
         ChecksPayableText: Text;
-        VendAddr: array[8] of Text[100];
         ShipToAddr: array[8] of Text[100];
         CompanyAddr: array[8] of Text[100];
-        BuyFromAddr: array[8] of Text[100];
-        PurchaserText: Text[30];
-        VATNoText: Text[80];
-        ReferenceText: Text[80];
         SalesPersonText: Text[30];
         TotalText: Text[50];
         TotalExclVATText: Text[50];
         TotalInclVATText: Text[50];
         LineDiscountPctText: Text;
+        PmtDiscText: Text;
         RemainingAmountTxt: Text;
         JobNoLbl: Text;
         JobTaskNoLbl: Text;
@@ -919,10 +1054,7 @@ report 50004 "Purchase Order (Newtronic)"
         MoreLines: Boolean;
         ShowWorkDescription: Boolean;
         ShowShippingAddr: Boolean;
-        ArchiveDocument: Boolean;
         LogInteraction: Boolean;
-        NoOfCopies: Integer;
-        ShowInternalInfo: Boolean;
         TotalSubTotal: Decimal;
         TotalAmount: Decimal;
         TotalAmountInclVAT: Decimal;
@@ -931,11 +1063,10 @@ report 50004 "Purchase Order (Newtronic)"
         TotalPaymentDiscOnVAT: Decimal;
         RemainingAmount: Decimal;
         TransHeaderAmount: Decimal;
-        PricesInclVATtxt: Text[30];
-        AllowInvDisctxt: Text[30];
         [InDataSet]
         LogInteractionEnable: Boolean;
         DisplayAssemblyInformation: Boolean;
+        DisplayShipmentInformation: Boolean;
         CompanyLogoPosition: Integer;
         FirstLineHasBeenOutput: Boolean;
         CalculatedExchRate: Decimal;
@@ -950,6 +1081,11 @@ report 50004 "Purchase Order (Newtronic)"
         NoFilterSetErr: Label 'You must specify one or more filters to avoid accidently printing all documents.';
         TotalAmountExclInclVATValue: Decimal;
         DisplayAdditionalFeeNote: Boolean;
+        Item: Record Item;
+        GreetingLbl: Label 'Hello';
+        ClosingLbl: Label 'Sincerely';
+        PmtDiscTxt: Label 'If we receive the payment before %1, you are eligible for a %2% payment discount.', Comment = '%1 Discount Due Date %2 = value of Payment Discount % ';
+        BodyLbl: Label 'Thank you for your business. Your invoice is attached to this message.';
         AlreadyPaidLbl: Label 'The invoice has been paid.';
         PartiallyPaidLbl: Label 'The invoice has been partially paid. The remaining amount is %1', Comment = '%1=an amount';
         FromLbl: Label 'From';
@@ -962,45 +1098,49 @@ report 50004 "Purchase Order (Newtronic)"
         JobTaskDescription: Text[100];
         JobTaskDescLbl: Label 'Job Task Description';
         UnitLbl: Label 'Unit';
+        VATClausesText: Text;
         QtyLbl: Label 'Qty', Comment = 'Short form of Quantity';
         PriceLbl: Label 'Price';
         PricePerLbl: Label 'Price per';
+        CurrCode: Text[10];
+        CurrSymbol: Text[10];
+        AppliesToText: Text;
         PageCaption: TextConst DAN = 'Side %1 af ', DEU = 'Seite %1 von ', ENU = 'Page %1 of ';
-        UnitPriceCaptionLbl: TextConst DAN = 'Købspris', DEU = 'Preis/Stck', ENU = 'Unit Price';
+        UnitPriceCaptionLbl: TextConst DAN = 'Enhedspris', DEU = 'Preis/Stck', ENU = 'Unit Price';
         SalesInvLineDiscCaptionLbl: TextConst DAN = 'Rabat', DEU = 'Rabatt', ENU = 'Disc.';
         AmountCaptionLbl: TextConst DAN = 'Beløb', DEU = 'Total', ENU = 'Amount';
         AttentionLbl: TextConst DAN = 'Kundeattention', DEU = 'Att.:', ENU = 'Sell-to Contact';
-        ItemAltNoLbl: TextConst DAN = 'Vores varenr.', DEU = 'Unser Artikelnr.', ENU = 'Our Item No.';
         SubTotalLbl: TextConst DAN = 'Subtotal', ENU = 'Subtotal';
         InvDiscountAmtLbl: TextConst DAN = 'Fakturarabat', ENU = 'Invoice Discount';
-        Item: Record Item;
         TotalsLbl: TextConst DAN = 'Totaler', DEU = 'Summen', ENU = 'Totals';
         TariffLbl: TextConst DAN = 'Tarif', DEU = 'Tarif', ENU = 'Tariff';
         NetWeightLbl: TextConst DAN = 'Nettovægt', DEU = 'Netto Gewicht', ENU = 'Net Weight';
         ValueLbl: TextConst DAN = 'Værdi', DEU = 'Wert', ENU = 'Value';
         BankNameLbl: TextConst DAN = 'Banknavn', DEU = 'Bankname', ENU = 'Bank Name';
-        BankBranchNoLbl: TextConst DAN = 'Reg.nr.', DEU = 'Filialnr.', ENU = 'Branch No.';
+        BankBranchNoLbl: TextConst DAN = 'Registreringsnr.', DEU = 'Filialnr.', ENU = 'Branch No.';
         BankAccountNoLbl: TextConst DAN = 'Kontonr.', DEU = 'Kontonr.', ENU = 'Account No.';
-        PhoneNoLbl: TextConst DAN = 'Tlf.: ', DEU = 'Tlf.: ', ENU = 'Tel.: ';
+        PhoneNoLbl: TextConst DAN = 'Telefon', ENU = 'Phone No.';
         FaxNoLbl: TextConst DAN = 'Fax: ', DEU = 'Fax: ', ENU = 'Fax: ';
-        DocumentTitleLbl: TextConst DAN = 'Købsordre', DEU = 'Bestellung', ENU = 'Purchase Order';
+        DocumentTitleLbl: TextConst DAN = 'Kreditnota', DEU = 'Gutschrift', ENU = 'Credit Memo';
         SalespersonLbl: TextConst DAN = 'Sælger', DEU = 'Verkäufer', ENU = 'Salesperson';
         PaymentTermsDescLbl: TextConst DAN = 'Betalingsbetingelser', DEU = 'Zahlungsbedingungen', ENU = 'Payment Terms';
-        SalesOrderNo: Code[20];
-        ReceiptDateLbl: TextConst DAN = 'Modtagelsesdato', DEU = 'Eingangsdatum', ENU = 'Receipt Date';
         ShiptoAddrLbl: TextConst DAN = 'Leveringsadresse', DEU = 'Lieferadresse', ENU = 'Ship-to Address';
-        PostedShipmentDateLbl: TextConst DAN = 'Levering', ENU = 'Shipment';
-        CompanyInfoPhoneNoLbl: TextConst DAN = 'Telefon', ENU = 'Phone No.';
+        ShptMethodDescLbl: TextConst DAN = 'Leveringsform', ENU = 'Shipment Method';
+        CompanyInfoGiroNoLbl: TextConst DAN = 'Gironr.', ENU = 'Giro No.';
+        PostedShipmentDateLbl: TextConst DAN = 'Afsendelsesdato', ENU = 'Shipment Date';
         EMailLbl: TextConst DAN = 'Email', ENU = 'Email';
         HomePageLbl: TextConst DAN = 'Hjemmeside', ENU = 'Home Page';
-        VendorItemNoLbl: TextConst DAN = 'Leverandørs varenr.', ENU = 'Vendor Item No.';
+        IBANLbl: TextConst DAN = 'IBAN', ENU = 'IBAN';
+        SWIFTLbl: TextConst DAN = 'SWIFT', ENU = 'SWIFT';
+        AppliesToTextLbl: TextConst DAN = 'Udligner bilag', ENU = 'Applies to Document';
+        SalesPrepCreditMemoNoLbl: TextConst DAN = 'Forudbetalingskreditnota', ENU = 'Prepayment Credit Memo';
+        TotalInclVATTxtForeign: TextConst ENU = 'Total %1', DAN = 'I alt %1';
+        TotalInclVATTxt: TextConst ENU = 'Total %1 incl. VAT', DAN = 'I alt %1 inkl. moms';
+        TotalInclVATTxtToShow: Text[50];
 
-    procedure InitializeRequest(NewNoOfCopies: Integer; NewShowInternalInfo: Boolean; NewArchiveDocument: Boolean; NewLogInteraction: Boolean)
+    local procedure InitLogInteraction()
     begin
-        NoOfCopies := NewNoOfCopies;
-        ShowInternalInfo := NewShowInternalInfo;
-        ArchiveDocument := NewArchiveDocument;
-        LogInteraction := NewLogInteraction;
+        LogInteraction := SegManagement.FindInteractTmplCode(6) <> '';
     end;
 
     local procedure IsReportInPreviewMode(): Boolean
@@ -1010,31 +1150,32 @@ report 50004 "Purchase Order (Newtronic)"
         exit(CurrReport.Preview or MailManagement.IsHandlingGetEmailBody);
     end;
 
-    local procedure InitLogInteraction()
+    local procedure DocumentCaption(): Text[250]
+    var
+        DocCaption: Text[250];
     begin
-        LogInteraction := SegManagement.FindInteractTmplCode(13) <> '';
+        OnBeforeDocumentCaption(Header, DocCaption);
+        if DocCaption <> '' then
+            exit(DocCaption);
+
+        if Header."Prepayment Credit Memo" then
+            exit(SalesPrepCreditMemoNoLbl);
+        exit(DocumentTitleLbl);
     end;
 
-    local procedure FormatAddressFields(var PurchaseHeader: Record "Purchase Header")
+    procedure InitializeRequest(NewLogInteraction: Boolean; DisplayAsmInfo: Boolean)
     begin
-        FormatAddr.GetCompanyAddr(PurchaseHeader."Responsibility Center", RespCenter, CompanyInfo, CompanyAddr);
-        FormatAddr.PurchHeaderBuyFrom(BuyFromAddr, PurchaseHeader);
-        if PurchaseHeader."Buy-from Vendor No." <> PurchaseHeader."Pay-to Vendor No." then
-            FormatAddr.PurchHeaderPayTo(VendAddr, PurchaseHeader);
-        FormatAddr.PurchHeaderShipTo(ShipToAddr, PurchaseHeader);
-        ShowShippingAddr := ShipToAddr[1] <> '';
+        LogInteraction := NewLogInteraction;
+        DisplayAssemblyInformation := DisplayAsmInfo;
     end;
 
-    local procedure FormatDocumentFields(PurchaseHeader: Record "Purchase Header")
+    local procedure GetUOMText(UOMCode: Code[10]): Text[50]
+    var
+        UnitOfMeasure: Record "Unit of Measure";
     begin
-        FormatDocument.SetTotalLabels(PurchaseHeader."Currency Code", TotalText, TotalInclVATText, TotalExclVATText);
-        FormatDocument.SetPurchaser(SalesPurchPerson, PurchaseHeader."Purchaser Code", PurchaserText);
-        FormatDocument.SetPaymentTerms(PaymentTerms, PurchaseHeader."Payment Terms Code", PurchaseHeader."Language Code");
-        FormatDocument.SetPaymentTerms(PrepmtPaymentTerms, PurchaseHeader."Prepmt. Payment Terms Code", PurchaseHeader."Language Code");
-        FormatDocument.SetShipmentMethod(ShipmentMethod, PurchaseHeader."Shipment Method Code", PurchaseHeader."Language Code");
-
-        ReferenceText := FormatDocument.SetText(PurchaseHeader."Your Reference" <> '', PurchaseHeader.FieldCaption("Your Reference"));
-        VATNoText := FormatDocument.SetText(PurchaseHeader."VAT Registration No." <> '', PurchaseHeader.FieldCaption("VAT Registration No."));
+        if not UnitOfMeasure.Get(UOMCode) then
+            exit(UOMCode);
+        exit(UnitOfMeasure.Description);
     end;
 
     local procedure CreateReportTotalLines()
@@ -1045,40 +1186,36 @@ report 50004 "Purchase Order (Newtronic)"
         if TotalInvDiscAmount <> 0 then begin
             ReportTotalsLine.Add(InvDiscountAmtLbl, TotalInvDiscAmount, false, false, false);
             if TotalAmountVAT <> 0 then
-                if Header."Prices Including VAT" then
-                    ReportTotalsLine.Add(TotalInclVATText, TotalAmountInclVAT, true, false, false)
-                else
-                    ReportTotalsLine.Add(TotalExclVATText, TotalAmount, true, false, false);
+                ReportTotalsLine.Add(TotalExclVATText, TotalAmount, true, false, false);
         end;
         if TotalAmountVAT <> 0 then
             ReportTotalsLine.Add(VATAmountLine.VATAmountText, TotalAmountVAT, false, true, false);
     end;
 
-    local procedure DocumentCaption(): Text[250]
-    var
-        DocCaption: Text;
+    local procedure FormatAddressFields(var SalesCrMemoHeader: Record "Sales Cr.Memo Header")
     begin
-        exit(DocumentTitleLbl);
+        FormatAddr.GetCompanyAddr(SalesCrMemoHeader."Responsibility Center", RespCenter, CompanyInfo, CompanyAddr);
+        FormatAddr.SalesCrMemoBillTo(CustAddr, SalesCrMemoHeader);
+        ShowShippingAddr := FormatAddr.SalesCrMemoShipTo(ShipToAddr, CustAddr, SalesCrMemoHeader);
     end;
 
-    local procedure GetSalesOrderNo()
-    var
-        PurchLine: Record "Purchase Line";
-        MultipleSalesOrders: Boolean;
+    local procedure FormatDocumentFields(SalesCrMemoHeader: Record "Sales Cr.Memo Header")
     begin
-        MultipleSalesOrders := FALSE;
-        SalesOrderNo := '';
-        PurchLine.SETRANGE("Document Type", Header."Document Type");
-        PurchLine.SETRANGE("Document No.", Header."No.");
-        IF PurchLine.FINDSET THEN
-            REPEAT
-                IF (SalesOrderNo <> '') AND (PurchLine."Sales Order No." <> SalesOrderNo) THEN BEGIN
-                    SalesOrderNo := '';
-                    MultipleSalesOrders := TRUE;
-                END;
-                IF (PurchLine."Sales Order No." <> '') AND (SalesOrderNo = '') AND NOT MultipleSalesOrders THEN
-                    SalesOrderNo := PurchLine."Sales Order No.";
-            UNTIL PurchLine.NEXT = 0;
+        with SalesCrMemoHeader do begin
+            FormatDocument.SetTotalLabels("Currency Code", TotalText, TotalInclVATText, TotalExclVATText);
+            FormatDocument.SetSalesPerson(SalespersonPurchaser, "Salesperson Code", SalesPersonText);
+            FormatDocument.SetPaymentTerms(PaymentTerms, "Payment Terms Code", "Language Code");
+            FormatDocument.SetPaymentMethod(PaymentMethod, "Payment Method Code", "Language Code");
+            FormatDocument.SetShipmentMethod(ShipmentMethod, "Shipment Method Code", "Language Code");
+
+            AppliesToText :=
+              FormatDocument.SetText("Applies-to Doc. No." <> '', StrSubstNo('%1 %2', Format("Applies-to Doc. Type"), "Applies-to Doc. No."));
+        end;
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeDocumentCaption(SalesCrMemoHeader: Record "Sales Cr.Memo Header"; var DocCaption: Text[250])
+    begin
     end;
 }
 

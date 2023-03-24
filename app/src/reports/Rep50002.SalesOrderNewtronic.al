@@ -1,21 +1,22 @@
-// Version List=LC00.03;
+// Version List=LC00.11;
 
-report 50001 "Sales Credit Memo (Newtronic)"
+report 50002 "Sales Order (Newtronic)"
 {
-    RDLCLayout = './REP/50001.Report.SalesCrMemo.rdlc';
-    CaptionML = DAN = 'Salgskreditnota', ENU = 'Sales Credit Memo';
+    RDLCLayout = './src/layouts/50002.Report.SalesOrder.rdlc';
+    CaptionML = DAN = 'Salgsordre', ENU = 'Sales Order';
     DefaultLayout = RDLC;
     EnableHyperlinks = true;
+    Permissions = TableData "Sales Shipment Buffer" = rimd;
     PreviewMode = PrintLayout;
 
     dataset
     {
-        dataitem(Header; "Sales Cr.Memo Header")
+        dataitem(Header; "Sales Header")
         {
-            DataItemTableView = SORTING("No.");
+            DataItemTableView = SORTING("Document Type", "No.") WHERE("Document Type" = CONST(Order));
             RequestFilterFields = "No.", "Sell-to Customer No.", "No. Printed";
-            RequestFilterHeadingML = DAN = 'Bogført salgskreditnota',
-                                     ENU = 'Posted Sales Credit Memo';
+            RequestFilterHeadingML = DAN = 'Salgsordre',
+                                     ENU = 'Sales Order';
             column(CompanyAddress1; CompanyAddr[1])
             {
             }
@@ -49,13 +50,13 @@ report 50001 "Sales Credit Memo (Newtronic)"
             column(CompanyPicture; DummyCompanyInfo.Picture)
             {
             }
-            column(CompanyPhoneNo; CompanyInfo."Phone No.")
+            column(CompanyPhoneNo; PhoneNoLbl + CompanyInfo."Phone No.")
             {
             }
-            column(CompanyPhoneNo_Lbl; PhoneNoLbl)
+            column(CompanyPhoneNo_Lbl; CompanyInfoPhoneNoLbl)
             {
             }
-            column(CompanyFaxNo; CompanyInfo."Fax No.")
+            column(CompanyFaxNo; FaxNoLbl + CompanyInfo."Fax No.")
             {
             }
             column(CompanyGiroNo; CompanyInfo."Giro No.")
@@ -85,13 +86,13 @@ report 50001 "Sales Credit Memo (Newtronic)"
             column(CompanyIBAN; CompanyInfo.IBAN)
             {
             }
-            column(CompanyIBAN_Lbl; IBANLbl)
+            column(CompanyIBAN_Lbl; CompanyInfo.FieldCaption(IBAN))
             {
             }
             column(CompanySWIFT; CompanyInfo."SWIFT Code")
             {
             }
-            column(CompanySWIFT_Lbl; SWIFTLbl)
+            column(CompanySWIFT_Lbl; CompanyInfo.FieldCaption("SWIFT Code"))
             {
             }
             column(CompanyLogoPosition; CompanyLogoPosition)
@@ -277,10 +278,10 @@ report 50001 "Sales Credit Memo (Newtronic)"
             column(DocumentNo_Lbl; InvNoLbl)
             {
             }
-            column(AppliesToDocument; AppliesToText)
+            column(QuoteNo; "Quote No.")
             {
             }
-            column(AppliesToDocument_Lbl; AppliesToTextLbl)
+            column(QuoteNo_Lbl; FieldCaption("Quote No."))
             {
             }
             column(PricesIncludingVAT; "Prices Including VAT")
@@ -319,16 +320,10 @@ report 50001 "Sales Credit Memo (Newtronic)"
             column(GlobalLocationNumber_Lbl; GetCustomerGlobalLocationNumberLbl)
             {
             }
+            column(SellToFaxNo; GetSellToCustomerFaxNo)
+            {
+            }
             column(SellToPhoneNo; "Sell-to Phone No.")
-            {
-            }
-            column(From_Lbl; FromLbl)
-            {
-            }
-            column(BilledTo_Lbl; BilledToLbl)
-            {
-            }
-            column(ChecksPayable_Lbl; ChecksPayableText)
             {
             }
             column(LegalEntityType; Cust.GetLegalEntityType)
@@ -449,7 +444,10 @@ report 50001 "Sales Credit Memo (Newtronic)"
             column(SellToContactLbl; AttentionLbl)
             {
             }
-            dataitem(Line; "Sales Cr.Memo Line")
+            column(FooterPicture; SalesSetup."Sales Doc. Footer Picture")
+            {
+            }
+            dataitem(Line; "Sales Line")
             {
                 DataItemLink = "Document No." = FIELD("No.");
                 DataItemLinkReference = Header;
@@ -459,7 +457,7 @@ report 50001 "Sales Credit Memo (Newtronic)"
                 }
                 column(AmountExcludingVAT_Line; Amount)
                 {
-                    AutoFormatExpression = GetCurrencyCode();
+                    AutoFormatExpression = "Currency Code";
                     AutoFormatType = 1;
                 }
                 column(AmountExcludingVAT_Line_Lbl; FieldCaption(Amount))
@@ -467,12 +465,12 @@ report 50001 "Sales Credit Memo (Newtronic)"
                 }
                 column(AmountIncludingVAT_Line; "Amount Including VAT")
                 {
-                    AutoFormatExpression = GetCurrencyCode();
+                    AutoFormatExpression = "Currency Code";
                     AutoFormatType = 1;
                 }
                 column(AmountIncludingVAT_Line_Lbl; FieldCaption("Amount Including VAT"))
                 {
-                    AutoFormatExpression = GetCurrencyCode();
+                    AutoFormatExpression = "Currency Code";
                     AutoFormatType = 1;
                 }
                 column(Description_Line; Description)
@@ -493,7 +491,7 @@ report 50001 "Sales Credit Memo (Newtronic)"
                 }
                 column(LineAmount_Line; FormattedLineAmount)
                 {
-                    AutoFormatExpression = GetCurrencyCode();
+                    AutoFormatExpression = "Currency Code";
                     AutoFormatType = 1;
                 }
                 column(LineAmount_Line_Lbl; AmountCaptionLbl)
@@ -520,7 +518,7 @@ report 50001 "Sales Credit Memo (Newtronic)"
                 column(Quantity_Line; FormattedQuantity)
                 {
                 }
-                column(Quantity_Line_Lbl; FieldCaption(Quantity))
+                column(Quantity_Line_Lbl; QtyLbl)
                 {
                 }
                 column(Type_Line; Format(Type))
@@ -528,7 +526,7 @@ report 50001 "Sales Credit Memo (Newtronic)"
                 }
                 column(UnitPrice; FormattedUnitPrice)
                 {
-                    AutoFormatExpression = GetCurrencyCode();
+                    AutoFormatExpression = "Currency Code";
                     AutoFormatType = 2;
                 }
                 column(UnitPrice_Lbl; UnitPriceCaptionLbl)
@@ -537,7 +535,7 @@ report 50001 "Sales Credit Memo (Newtronic)"
                 column(UnitOfMeasure; "Unit of Measure")
                 {
                 }
-                column(UnitOfMeasure_Lbl; FieldCaption("Unit of Measure"))
+                column(UnitOfMeasure_Lbl; UnitLbl)
                 {
                 }
                 column(VATIdentifier_Line; "VAT Identifier")
@@ -605,6 +603,12 @@ report 50001 "Sales Credit Memo (Newtronic)"
                 column(ValueLbl; ValueLbl)
                 {
                 }
+                column(LineNoLbl; FieldCaption("Line No."))
+                {
+                }
+                column(LineNo; "Line No.")
+                {
+                }
                 trigger OnAfterGetRecord()
                 begin
                     if Type = Type::"G/L Account" then
@@ -638,11 +642,33 @@ report 50001 "Sales Credit Memo (Newtronic)"
                     TotalAmountInclVAT += "Amount Including VAT";
                     TotalPaymentDiscOnVAT += -("Line Amount" - "Inv. Discount Amount" - "Amount Including VAT");
 
-                    FormatDocument.SetSalesCrMemoLine(Line, FormattedQuantity, FormattedUnitPrice, FormattedVATPct, FormattedLineAmount);
-
                     if FirstLineHasBeenOutput then
                         Clear(DummyCompanyInfo.Picture);
                     FirstLineHasBeenOutput := true;
+
+                    JobNo := "Job No.";
+                    JobTaskNo := "Job Task No.";
+
+                    if JobTaskNo <> '' then begin
+                        JobTaskNoLbl := JobTaskNoLbl2;
+                        JobTaskDescription := GetJobTaskDescription(JobNo, JobTaskNo);
+                    end else begin
+                        JobTaskDescription := '';
+                        JobTaskNoLbl := '';
+                    end;
+
+                    if JobNo <> '' then
+                        JobNoLbl := JobNoLbl2
+                    else
+                        JobNoLbl := '';
+
+                    FormatDocument.SetSalesLine(Line, FormattedQuantity, FormattedUnitPrice, FormattedVATPct, FormattedLineAmount);
+
+                    if Type = Type::Item then begin
+                        if "No." <> Item."No." then
+                            if Item.Get("No.") then;
+                    end else
+                        Clear(Item);
                 end;
 
                 trigger OnPreDataItem()
@@ -704,7 +730,7 @@ report 50001 "Sales Credit Memo (Newtronic)"
                 }
                 column(VATBase_VatAmountLine; "VAT Base")
                 {
-                    AutoFormatExpression = Line.GetCurrencyCode();
+                    AutoFormatExpression = Header."Currency Code";
                     AutoFormatType = 1;
                 }
                 column(VATBase_VatAmountLine_Lbl; FieldCaption("VAT Base"))
@@ -834,7 +860,7 @@ report 50001 "Sales Credit Memo (Newtronic)"
                 column(TotalAmountExclInclVAT; Format(TotalAmountExclInclVATValue, 0, AutoFormat.ResolveAutoFormat("Auto Format"::AmountFormat, Header."Currency Code")))
                 {
                 }
-                column(TotalAmountExclInclVATText; TotalAmountExclInclVATTextValue)
+                column(TotalAmountExclInclVATText; TotalInclVATTxtToShow)
                 {
                 }
 
@@ -847,24 +873,33 @@ report 50001 "Sales Credit Memo (Newtronic)"
                         TotalAmountExclInclVATTextValue := TotalInclVATText;
                         TotalAmountExclInclVATValue := TotalAmountInclVAT;
                     end;
+
+                    if (Header."Gen. Bus. Posting Group" = 'DK') or (Header."Gen. Bus. Posting Group" = 'INDENLANDS') then
+                        TotalInclVATTxtToShow := StrSubstNo(TotalInclVATTxt, Header."Currency Code")
+                    else
+                        TotalInclVATTxtToShow := StrSubstNo(TotalInclVATTxtForeign, Header."Currency Code");
                 end;
             }
 
             trigger OnAfterGetRecord()
             var
                 CurrencyExchangeRate: Record "Currency Exchange Rate";
-                Currency: Record Currency;
-                GeneralLedgerSetup: Record "General Ledger Setup";
+                ArchiveManagement: Codeunit ArchiveManagement;
+                SalesPost: Codeunit "Sales-Post";
             begin
+                CurrReport.Language := Language.GetLanguageIdOrDefault("Language Code");
+
                 if not IsReportInPreviewMode then
-                    CODEUNIT.Run(CODEUNIT::"Sales Cr. Memo-Printed", Header);
+                    CODEUNIT.Run(CODEUNIT::"Sales-Printed", Header);
 
                 CalcFields("Work Description");
                 ShowWorkDescription := "Work Description".HasValue;
-                CurrReport.Language := Language.GetLanguageIdOrDefault("Language Code");
 
-                FormatAddressFields(Header);
-                FormatDocumentFields(Header);
+                ChecksPayableText := StrSubstNo(ChecksPayableLbl, CompanyInfo.Name);
+
+                FormatAddr.GetCompanyAddr('', RespCenter, CompanyInfo, CompanyAddr);
+                FormatAddr.SalesHeaderBillTo(CustAddr, Header);
+                ShowShippingAddr := FormatAddr.SalesHeaderShipTo(ShipToAddr, CustAddr, Header);
                 if SellToContact.Get("Sell-to Contact No.") then;
                 if BillToContact.Get("Bill-to Contact No.") then;
 
@@ -876,14 +911,17 @@ report 50001 "Sales Credit Memo (Newtronic)"
                     CalculatedExchRate :=
                       Round(1 / "Currency Factor" * CurrencyExchangeRate."Exchange Rate Amount", 0.000001);
                     ExchangeRateText := StrSubstNo(ExchangeRateTxt, CalculatedExchRate, CurrencyExchangeRate."Exchange Rate Amount");
-                    CurrCode := "Currency Code";
-                    if Currency.Get("Currency Code") then
-                        CurrSymbol := Currency.GetCurrencySymbol();
-                end else
-                    if GeneralLedgerSetup.Get() then begin
-                        CurrCode := GeneralLedgerSetup."LCY Code";
-                        CurrSymbol := GeneralLedgerSetup.GetCurrencySymbol();
-                    end;
+                end;
+
+                FormatDocumentFields(Header);
+                if SellToContact.Get("Sell-to Contact No.") then;
+                if BillToContact.Get("Bill-to Contact No.") then;
+
+                if not IsReportInPreviewMode and
+                   (CurrReport.UseRequestPage and ArchiveDocument or
+                    not CurrReport.UseRequestPage and SalesSetup."Archive Orders")
+                then
+                    ArchiveManagement.StoreSalesDocument(Header, LogInteraction);
 
                 TotalSubTotal := 0;
                 TotalInvDiscAmount := 0;
@@ -918,6 +956,18 @@ report 50001 "Sales Credit Memo (Newtronic)"
                         Enabled = LogInteractionEnable;
                         ToolTipML = DAN = 'Angiver at interation med kontakten bliver logført.', ENU = 'Specifies that interactions with the contact are logged.';
                     }
+                    field(ArchiveDocument; ArchiveDocument)
+                    {
+                        ApplicationArea = Basic, Suite;
+                        CaptionML = DAN = 'Arkivér bilag', ENU = 'Archive Document';
+                        ToolTipML = DAN = 'Angiver, om bilaget arkiveres, efter du har udskrevet det.', ENU = 'Specifies if the document is archived after you print it.';
+
+                        trigger OnValidate()
+                        begin
+                            if not ArchiveDocument then
+                                LogInteraction := false;
+                        end;
+                    }
                 }
             }
         }
@@ -948,13 +998,14 @@ report 50001 "Sales Credit Memo (Newtronic)"
         CompanyInfo.SetAutoCalcFields(Picture);
         CompanyInfo.Get();
         SalesSetup.Get();
+        SalesSetup.CalcFields("Sales Doc. Footer Picture");
         CompanyInfo.VerifyAndSetPaymentInfo;
     end;
 
     trigger OnPostReport()
     begin
         if LogInteraction and not IsReportInPreviewMode then
-            if Header.FindSet then
+            if Header.FindSet() then
                 repeat
                     if Header."Bill-to Contact No." <> '' then
                         SegManagement.LogDocument(
@@ -979,17 +1030,23 @@ report 50001 "Sales Credit Memo (Newtronic)"
     end;
 
     var
-
+        CompanyInfoBankAccNoLbl: Label 'Account No.';
+        CompanyInfoBankNameLbl: Label 'Bank';
+        CompanyInfoGiroNoLbl: Label 'Giro No.';
+        CompanyInfoPhoneNoLbl: Label 'Phone No.';
         CopyLbl: Label 'Copy';
+        EMailLbl: Label 'Email';
+        HomePageLbl: Label 'Home Page';
         InvDiscBaseAmtLbl: Label 'Invoice Discount Base Amount';
         InvNoLbl: Label 'Invoice No.';
         LineAmtAfterInvDiscLbl: Label 'Payment Discount on VAT';
         LocalCurrencyLbl: Label 'Local Currency';
         PaymentMethodDescLbl: Label 'Payment Method';
         SalesInvLineDiscLbl: Label 'Discount %';
+        SalesInvoiceLbl: Label 'Invoice';
         YourSalesInvoiceLbl: Label 'Your Invoice';
         ShipmentLbl: Label 'Shipment';
-        TotalLbl: Label 'Total';
+        ShptMethodDescLbl: Label 'Shipment Method';
         VATAmtSpecificationLbl: Label 'VAT Amount Specification';
         VATAmtLbl: Label 'VAT Amount';
         VATAmountLCYLbl: Label 'VAT Amount (LCY)';
@@ -1023,10 +1080,8 @@ report 50001 "Sales Credit Memo (Newtronic)"
         FormatDocument: Codeunit "Format Document";
         SegManagement: Codeunit SegManagement;
         AutoFormat: Codeunit "Auto Format";
-        WorkDescriptionInstream: InStream;
         JobNo: Code[20];
         JobTaskNo: Code[20];
-        WorkDescriptionLine: Text;
         CustAddr: array[8] of Text[100];
         ChecksPayableText: Text;
         ShipToAddr: array[8] of Text[100];
@@ -1036,7 +1091,6 @@ report 50001 "Sales Credit Memo (Newtronic)"
         TotalExclVATText: Text[50];
         TotalInclVATText: Text[50];
         LineDiscountPctText: Text;
-        PmtDiscText: Text;
         RemainingAmountTxt: Text;
         JobNoLbl: Text;
         JobTaskNoLbl: Text;
@@ -1048,6 +1102,7 @@ report 50001 "Sales Credit Memo (Newtronic)"
         MoreLines: Boolean;
         ShowWorkDescription: Boolean;
         ShowShippingAddr: Boolean;
+        ArchiveDocument: Boolean;
         LogInteraction: Boolean;
         TotalSubTotal: Decimal;
         TotalAmount: Decimal;
@@ -1060,7 +1115,6 @@ report 50001 "Sales Credit Memo (Newtronic)"
         [InDataSet]
         LogInteractionEnable: Boolean;
         DisplayAssemblyInformation: Boolean;
-        DisplayShipmentInformation: Boolean;
         CompanyLogoPosition: Integer;
         FirstLineHasBeenOutput: Boolean;
         CalculatedExchRate: Decimal;
@@ -1075,11 +1129,6 @@ report 50001 "Sales Credit Memo (Newtronic)"
         NoFilterSetErr: Label 'You must specify one or more filters to avoid accidently printing all documents.';
         TotalAmountExclInclVATValue: Decimal;
         DisplayAdditionalFeeNote: Boolean;
-        Item: Record Item;
-        GreetingLbl: Label 'Hello';
-        ClosingLbl: Label 'Sincerely';
-        PmtDiscTxt: Label 'If we receive the payment before %1, you are eligible for a %2% payment discount.', Comment = '%1 Discount Due Date %2 = value of Payment Discount % ';
-        BodyLbl: Label 'Thank you for your business. Your invoice is attached to this message.';
         AlreadyPaidLbl: Label 'The invoice has been paid.';
         PartiallyPaidLbl: Label 'The invoice has been partially paid. The remaining amount is %1', Comment = '%1=an amount';
         FromLbl: Label 'From';
@@ -1091,14 +1140,8 @@ report 50001 "Sales Credit Memo (Newtronic)"
         JobTaskNoLbl2: Label 'Job Task No.';
         JobTaskDescription: Text[100];
         JobTaskDescLbl: Label 'Job Task Description';
-        UnitLbl: Label 'Unit';
-        VATClausesText: Text;
-        QtyLbl: Label 'Qty', Comment = 'Short form of Quantity';
         PriceLbl: Label 'Price';
         PricePerLbl: Label 'Price per';
-        CurrCode: Text[10];
-        CurrSymbol: Text[10];
-        AppliesToText: Text;
         PageCaption: TextConst DAN = 'Side %1 af ', DEU = 'Seite %1 von ', ENU = 'Page %1 of ';
         UnitPriceCaptionLbl: TextConst DAN = 'Enhedspris', DEU = 'Preis/Stck', ENU = 'Unit Price';
         SalesInvLineDiscCaptionLbl: TextConst DAN = 'Rabat', DEU = 'Rabatt', ENU = 'Disc.';
@@ -1106,32 +1149,38 @@ report 50001 "Sales Credit Memo (Newtronic)"
         AttentionLbl: TextConst DAN = 'Kundeattention', DEU = 'Att.:', ENU = 'Sell-to Contact';
         SubTotalLbl: TextConst DAN = 'Subtotal', ENU = 'Subtotal';
         InvDiscountAmtLbl: TextConst DAN = 'Fakturarabat', ENU = 'Invoice Discount';
+        Item: Record Item;
         TotalsLbl: TextConst DAN = 'Totaler', DEU = 'Summen', ENU = 'Totals';
         TariffLbl: TextConst DAN = 'Tarif', DEU = 'Tarif', ENU = 'Tariff';
         NetWeightLbl: TextConst DAN = 'Nettovægt', DEU = 'Netto Gewicht', ENU = 'Net Weight';
         ValueLbl: TextConst DAN = 'Værdi', DEU = 'Wert', ENU = 'Value';
         BankNameLbl: TextConst DAN = 'Banknavn', DEU = 'Bankname', ENU = 'Bank Name';
-        BankBranchNoLbl: TextConst DAN = 'Registreringsnr.', DEU = 'Filialnr.', ENU = 'Branch No.';
+        BankBranchNoLbl: TextConst DAN = 'Reg.nr.', DEU = 'Filialnr.', ENU = 'Branch No.';
         BankAccountNoLbl: TextConst DAN = 'Kontonr.', DEU = 'Kontonr.', ENU = 'Account No.';
-        PhoneNoLbl: TextConst DAN = 'Telefon', ENU = 'Phone No.';
+        PhoneNoLbl: TextConst DAN = 'Tlf.: ', DEU = 'Tlf.: ', ENU = 'Tel.: ';
         FaxNoLbl: TextConst DAN = 'Fax: ', DEU = 'Fax: ', ENU = 'Fax: ';
-        DocumentTitleLbl: TextConst DAN = 'Kreditnota', DEU = 'Gutschrift', ENU = 'Credit Memo';
+        DocumentTitleLbl: TextConst DAN = 'Ordrebekræftelse', DEU = 'Auftragsbestätigung', ENU = 'Order Confirmation';
         SalespersonLbl: TextConst DAN = 'Sælger', DEU = 'Verkäufer', ENU = 'Salesperson';
         PaymentTermsDescLbl: TextConst DAN = 'Betalingsbetingelser', DEU = 'Zahlungsbedingungen', ENU = 'Payment Terms';
         ShiptoAddrLbl: TextConst DAN = 'Leveringsadresse', DEU = 'Lieferadresse', ENU = 'Ship-to Address';
-        ShptMethodDescLbl: TextConst DAN = 'Leveringsform', ENU = 'Shipment Method';
-        CompanyInfoGiroNoLbl: TextConst DAN = 'Gironr.', ENU = 'Giro No.';
-        PostedShipmentDateLbl: TextConst DAN = 'Afsendelsesdato', ENU = 'Shipment Date';
-        EMailLbl: TextConst DAN = 'Email', ENU = 'Email';
-        HomePageLbl: TextConst DAN = 'Hjemmeside', ENU = 'Home Page';
-        IBANLbl: TextConst DAN = 'IBAN', ENU = 'IBAN';
-        SWIFTLbl: TextConst DAN = 'SWIFT', ENU = 'SWIFT';
-        AppliesToTextLbl: TextConst DAN = 'Udligner bilag', ENU = 'Applies to Document';
-        SalesPrepCreditMemoNoLbl: TextConst DAN = 'Forudbetalingskreditnota', ENU = 'Prepayment Credit Memo';
+        PostedShipmentDateLbl: TextConst DAN = 'Levering', DEU = 'Lieferung', ENU = 'Delivery';
+        UnitLbl: TextConst DAN = 'Enhed', DEU = 'Einheit', ENU = 'Unit';
+        QtyLbl: TextConst DAN = 'Antal', DEU = 'Anzahl', ENU = 'Qty.';
+        TotalLbl: TextConst DAN = 'I alt', DEU = 'Total', ENU = 'Total';
+        TotalInclVATTxtForeign: TextConst ENU = 'Total %1', DAN = 'I alt %1';
+        TotalInclVATTxt: TextConst ENU = 'Total %1 incl. VAT', DAN = 'I alt %1 inkl. moms';
+        TotalInclVATTxtToShow: Text[50];
 
     local procedure InitLogInteraction()
     begin
-        LogInteraction := SegManagement.FindInteractTmplCode(6) <> '';
+        LogInteraction := SegManagement.FindInteractTmplCode(4) <> '';
+    end;
+
+    local procedure DocumentCaption(): Text[250]
+    var
+        DocCaption: Text;
+    begin
+        exit(DocumentTitleLbl);
     end;
 
     local procedure IsReportInPreviewMode(): Boolean
@@ -1139,34 +1188,6 @@ report 50001 "Sales Credit Memo (Newtronic)"
         MailManagement: Codeunit "Mail Management";
     begin
         exit(CurrReport.Preview or MailManagement.IsHandlingGetEmailBody);
-    end;
-
-    local procedure DocumentCaption(): Text[250]
-    var
-        DocCaption: Text[250];
-    begin
-        OnBeforeDocumentCaption(Header, DocCaption);
-        if DocCaption <> '' then
-            exit(DocCaption);
-
-        if Header."Prepayment Credit Memo" then
-            exit(SalesPrepCreditMemoNoLbl);
-        exit(DocumentTitleLbl);
-    end;
-
-    procedure InitializeRequest(NewLogInteraction: Boolean; DisplayAsmInfo: Boolean)
-    begin
-        LogInteraction := NewLogInteraction;
-        DisplayAssemblyInformation := DisplayAsmInfo;
-    end;
-
-    local procedure GetUOMText(UOMCode: Code[10]): Text[50]
-    var
-        UnitOfMeasure: Record "Unit of Measure";
-    begin
-        if not UnitOfMeasure.Get(UOMCode) then
-            exit(UOMCode);
-        exit(UnitOfMeasure.Description);
     end;
 
     local procedure CreateReportTotalLines()
@@ -1177,36 +1198,34 @@ report 50001 "Sales Credit Memo (Newtronic)"
         if TotalInvDiscAmount <> 0 then begin
             ReportTotalsLine.Add(InvDiscountAmtLbl, TotalInvDiscAmount, false, false, false);
             if TotalAmountVAT <> 0 then
-                ReportTotalsLine.Add(TotalExclVATText, TotalAmount, true, false, false);
+                if Header."Prices Including VAT" then
+                    ReportTotalsLine.Add(TotalInclVATText, TotalAmountInclVAT, true, false, false)
+                else
+                    ReportTotalsLine.Add(TotalExclVATText, TotalAmount, true, false, false);
         end;
         if TotalAmountVAT <> 0 then
             ReportTotalsLine.Add(VATAmountLine.VATAmountText, TotalAmountVAT, false, true, false);
     end;
 
-    local procedure FormatAddressFields(var SalesCrMemoHeader: Record "Sales Cr.Memo Header")
+    local procedure FormatDocumentFields(SalesHeader: Record "Sales Header")
     begin
-        FormatAddr.GetCompanyAddr(SalesCrMemoHeader."Responsibility Center", RespCenter, CompanyInfo, CompanyAddr);
-        FormatAddr.SalesCrMemoBillTo(CustAddr, SalesCrMemoHeader);
-        ShowShippingAddr := FormatAddr.SalesCrMemoShipTo(ShipToAddr, CustAddr, SalesCrMemoHeader);
+        FormatDocument.SetTotalLabels(SalesHeader."Currency Code", TotalText, TotalInclVATText, TotalExclVATText);
+        FormatDocument.SetSalesPerson(SalespersonPurchaser, SalesHeader."Salesperson Code", SalesPersonText);
+        FormatDocument.SetPaymentTerms(PaymentTerms, SalesHeader."Payment Terms Code", SalesHeader."Language Code");
+        FormatDocument.SetPaymentMethod(PaymentMethod, SalesHeader."Payment Method Code", SalesHeader."Language Code");
+        FormatDocument.SetShipmentMethod(ShipmentMethod, SalesHeader."Shipment Method Code", SalesHeader."Language Code");
     end;
 
-    local procedure FormatDocumentFields(SalesCrMemoHeader: Record "Sales Cr.Memo Header")
+    local procedure GetJobTaskDescription(JobNo: Code[20]; JobTaskNo: Code[20]): Text[100]
+    var
+        JobTask: Record "Job Task";
     begin
-        with SalesCrMemoHeader do begin
-            FormatDocument.SetTotalLabels("Currency Code", TotalText, TotalInclVATText, TotalExclVATText);
-            FormatDocument.SetSalesPerson(SalespersonPurchaser, "Salesperson Code", SalesPersonText);
-            FormatDocument.SetPaymentTerms(PaymentTerms, "Payment Terms Code", "Language Code");
-            FormatDocument.SetPaymentMethod(PaymentMethod, "Payment Method Code", "Language Code");
-            FormatDocument.SetShipmentMethod(ShipmentMethod, "Shipment Method Code", "Language Code");
+        JobTask.SetRange("Job No.", JobNo);
+        JobTask.SetRange("Job Task No.", JobTaskNo);
+        if JobTask.FindFirst() then
+            exit(JobTask.Description);
 
-            AppliesToText :=
-              FormatDocument.SetText("Applies-to Doc. No." <> '', StrSubstNo('%1 %2', Format("Applies-to Doc. Type"), "Applies-to Doc. No."));
-        end;
-    end;
-
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeDocumentCaption(SalesCrMemoHeader: Record "Sales Cr.Memo Header"; var DocCaption: Text[250])
-    begin
+        exit('');
     end;
 }
 

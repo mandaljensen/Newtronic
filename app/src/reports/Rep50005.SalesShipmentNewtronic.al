@@ -3,7 +3,7 @@
 report 50005 "Sales Shipment (Newtronic)"
 {
     DefaultLayout = RDLC;
-    RDLCLayout = './REP/50005.Report.SalesShipment.rdlc';
+    RDLCLayout = './src/layouts/50005.Report.SalesShipment.rdlc';
     CaptionML = DAN = 'Salgsleverance', ENU = 'Sales Shipment';
     PreviewMode = PrintLayout;
 
