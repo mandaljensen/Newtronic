@@ -848,10 +848,15 @@ report 50001 "Sales Credit Memo (Newtronic)"
                         TotalAmountExclInclVATValue := TotalAmountInclVAT;
                     end;
 
-                    if (Header."Gen. Bus. Posting Group" = 'DK') or (Header."Gen. Bus. Posting Group" = 'INDENLANDS') then
-                        TotalInclVATTxtToShow := StrSubstNo(TotalInclVATTxt, Header."Currency Code")
+                    if Header."Currency Code" = '' then
+                        CurrencyCodeToShow := GLSetup."LCY Code"
                     else
-                        TotalInclVATTxtToShow := StrSubstNo(TotalInclVATTxtForeign, Header."Currency Code");
+                        CurrencyCodeToShow := Header."Currency Code";
+
+                    if (Header."Gen. Bus. Posting Group" = 'DK') or (Header."Gen. Bus. Posting Group" = 'INDENLANDS') then
+                        TotalInclVATTxtToShow := StrSubstNo(TotalInclVATTxt, CurrencyCodeToShow)
+                    else
+                        TotalInclVATTxtToShow := StrSubstNo(TotalInclVATTxtForeign, CurrencyCodeToShow);
 
                 end;
             }
@@ -1137,6 +1142,7 @@ report 50001 "Sales Credit Memo (Newtronic)"
         TotalInclVATTxtForeign: TextConst ENU = 'Total %1', DAN = 'I alt %1';
         TotalInclVATTxt: TextConst ENU = 'Total %1 incl. VAT', DAN = 'I alt %1 inkl. moms';
         TotalInclVATTxtToShow: Text[50];
+        CurrencyCodeToShow: Code[20];
 
     local procedure InitLogInteraction()
     begin
