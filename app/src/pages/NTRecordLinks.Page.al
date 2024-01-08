@@ -118,7 +118,6 @@ page 50002 "NT Record Links"
                 trigger OnAction()
                 var
                     RecordLink: Record "Record Link";
-                    RecordLinkManagement: Codeunit "Record Link Management";
                     InStr: InStream;
                     Note: Text;
                 begin
@@ -126,7 +125,7 @@ page 50002 "NT Record Links"
                     RecordLink.CalcFields(Note);
                     RecordLink.Note.CreateInStream(InStr, TextEncoding::Windows);
                     InStr.Read(Note);
-                    Message(Note);
+                    Message('%1\%2', Rec."Record ID", Note);
                 end;
             }
         }
