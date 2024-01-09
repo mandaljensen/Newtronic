@@ -247,20 +247,6 @@ report 50005 "Sales Shipment (Newtronic)"
                         column(LinNo; LinNo)
                         {
                         }
-#if not CLEAN17
-                        column(CrossReferenceNo_Line; "Cross-Reference No.")
-                        {
-                            ObsoleteState = Pending;
-                            ObsoleteReason = 'Replaced by Item Reference No.';
-                            ObsoleteTag = '17.0';
-                        }
-                        column(CrossReferenceNo_Line_Lbl; FieldCaption("Item Reference No."))
-                        {
-                            ObsoleteState = Pending;
-                            ObsoleteReason = 'Replaced by Item Reference No.';
-                            ObsoleteTag = '17.0';
-                        }
-#endif
                         column(ItemReferenceNo_Line; "Item Reference No.")
                         {
                         }
