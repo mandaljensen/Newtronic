@@ -8,7 +8,7 @@
     "CRS.ObjectNamePrefix": "",
     "CRS.RemovePrefixFromFilename": true,
     "CRS.RenameWithGit": true,
-    "CRS.FileNamePattern": "<ObjectNameShort>.<ObjectTypeShort>.al",
+    "CRS.FileNamePattern": "<ObjectNameShort>.<ObjectType>.al",
     "CRS.OnSaveAlFileAction": "DoNothing",
     "CRS.DisableDefaultAlSnippets": true,
     "CRS.AlSubFolderName": "src"

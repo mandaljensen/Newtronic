@@ -4,7 +4,7 @@
   "publisher": "Mandal Jensen",
   "brief": "",
   "description": "This extension was first created by Logos Consult.",
-  "version": "19.6.0.22",
+  "version": "23.2.0.22",
   "privacyStatement": "",
   "EULA": "",
   "help": "",
@@ -12,8 +12,8 @@
   "logo": "",
   "dependencies": [],
   "screenshots": [],
-  "platform": "19.0.0.0",
-  "application": "19.0.0.0",
+  "platform": "23.0.0.0",
+  "application": "23.0.0.0",
   "features": [],
   "idRanges": [{
     "from": 50000,
@@ -23,7 +23,7 @@
     "from": 60000,
     "to": 60010
   }],
-  "runtime": "8.1",
+  "runtime": "12.0",
   "target": "Cloud",
   "resourceExposurePolicy": {
     "allowDebugging": true,

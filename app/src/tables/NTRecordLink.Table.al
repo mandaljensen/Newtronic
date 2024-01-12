@@ -71,6 +71,10 @@ table 50002 "NT Record Link"
         {
             Caption = 'To User ID';
         }
+        field(15; Processed; Boolean)
+        {
+            Caption = 'Processed';
+        }
     }
 
     keys
