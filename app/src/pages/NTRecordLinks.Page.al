@@ -67,6 +67,11 @@ page 50002 "NT Record Links"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the To User ID field.';
                 }
+                field(Processed; Rec.Processed)
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Processed field.';
+                }
             }
         }
     }
@@ -105,6 +110,48 @@ page 50002 "NT Record Links"
                             NTRecordLink."To User ID" := RecordLink."To User ID";
                             NTRecordLink.Insert(true);
                         until (RecordLink.Next() <= 0);
+                end;
+            }
+
+            action(CreateRecordLinks)
+            {
+                Caption = 'Create Record Links';
+                ApplicationArea = All;
+                ToolTip = 'Executes the Create Record Links action.';
+                Image = Create;
+
+                trigger OnAction()
+                var
+                    NTRecordLinks: Record "NT Record Link";
+                    NTRecordLinks2: Record "NT Record Link";
+                    RecordLink: Record "Record Link";
+                    UserConversion: Record "User Conversion";
+                    UserConversionToUser: Record "User Conversion";
+                begin
+                    NTRecordLinks.SetRange(Processed, false);
+                    if NTRecordLinks.FindSet(false) then
+                        repeat
+                            NTRecordLinks.CalcFields(Note);
+                            If (UserConversion.Get(NTRecordLinks."User ID") and (UserConversionToUser.Get(NTRecordLinks."To User ID"))) then begin
+                                RecordLink.Init();
+                                RecordLink."Link ID" := NTRecordLinks."Link ID";
+                                RecordLink."Record ID" := NTRecordLinks."Record ID";
+                                RecordLink.URL1 := NTRecordLinks.URL1;
+                                RecordLink.Description := NTRecordLinks.Description;
+                                RecordLink.Type := NTRecordLinks.Type;
+                                RecordLink.Note := NTRecordLinks.Note;
+                                RecordLink.Created := NTRecordLinks.Created;
+                                RecordLink."User ID" := UserConversion."User ID";
+                                RecordLink.Company := NTRecordLinks.Company;
+                                RecordLink.Notify := NTRecordLinks.Notify;
+                                RecordLink."To User ID" := UserConversionToUser."User ID";
+                                RecordLink.Insert(true);
+
+                                NTRecordLinks2.Get(NTRecordLinks."Link ID");
+                                NTRecordLinks2.Processed := true;
+                                NTRecordLinks2.Modify(true);
+                            end;
+                        until (NTRecordLinks.Next() <= 0);
                 end;
             }
 
